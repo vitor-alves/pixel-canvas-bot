@@ -1,12 +1,29 @@
+''' 
+Pixel Canvas Bot
+Copyright (C) 2017
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
 import requests
 import simplejson as json
 import socket
 import re
 import time
 from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
 from threading import Thread
 import threading
+from urllib.request import urlopen
 
 fingerprint = None
 
@@ -40,23 +57,50 @@ def sniffFingerprintPacket():
 
 
 
-# OPEN PIXELCANVAS IN BROWSER
+# OPEN PIXELCANVAS IN BROWSER.
+# Necessary to get the fingerprint
 def openBrowser():
 	driver = webdriver.Firefox()
-	driver.get('http://pixelcanvas.io/@0,0');
+	driver.get('http://pixelcanvas.io/@-200,-473');
 	time.sleep(20)
 	#driver.quit()
 
+# GET PIXEL COORDINATES AND COLOR FROM SERVER
+def getPixel():
+    url = "https://vault.linksolutions.co/pixel"
+    r = urlopen(url)
+    data = r.read().decode("UTF-8")
+    j = json.loads(data) 
+    return j
+
 #SEND PLACE PIXEL HTTP POST PACKETS
 def placePixel():
-	url = "http://pixelcanvas.io/api/pixel"
-	data = {'x': '2186', 'y': '-129', 'color': '5', 'fingerprint': fingerprint, 'token': 'null'}
-	headers = {'Content-type': 'application/json', 'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate', 'Accept-Language': 'en-US,en;q=0.8,pt;q=0.6', 'Connection': 'keep-alive', 'Host':'pixelcanvas.io', 'Origin':'http://pixelcanvas.io', 'Referer':'http://pixelcanvas.io/@-172,-484', 'Save-Data':'on', 'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.109 Safari/537.36'}
-	print(data)
-	r = requests.post(url, data=json.dumps(data), headers=headers)
-	print(r.text + "\n")
-	print(r.headers)
-	print(json.dumps(data))
-	threading.Timer(120.0, placePixel).start()
+        # Pixel info from server
+        pixel = getPixel()
+        x = str(pixel['p'][0])
+        y = str(pixel['p'][1])
+        color = str(pixel['p'][2])
+        online_clients = str(pixel['online_clients'])
+        # Send pixel
+        url = "http://pixelcanvas.io/api/pixel"
+        data = {'x': x, 'y': y, 'color': color, 'fingerprint': fingerprint, 'token': 'null'}
+        headers = {'Content-type': 'application/json', 'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate', 'Accept-Language': 'en-US,en;q=0.8,pt;q=0.6', 'Connection': 'keep-alive', 'Host':'pixelcanvas.io', 'Origin':'http://pixelcanvas.io', 'Referer':'http://pixelcanvas.io/@-172,-484', 'Save-Data':'on', 'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.109 Safari/537.36'}
+        # Response
+        r = requests.post(url, data=json.dumps(data), headers=headers)
+        j = json.loads(r.text)
+        wait_seconds = j['waitSeconds']
+        success = j['success']
+        # Print infos
+        if(success):
+            print('\n'+'Pixel colored successfuly! Position: ('+x+','+y+')!')
+        else:
+            print('\n'+'Failed to color pixel... I will try again soon.')
+        default_wait_seconds = 120.0
+        if(wait_seconds is None):
+            wait_seconds = default_wait_seconds
+        print('Wait seconds: ' + str(wait_seconds))
+        print(online_clients + ' peole are connected to the bot server.') 
+        # Place next pixel after 'wait_seconds'
+        threading.Timer(wait_seconds, placePixel).start()
 
 main()
