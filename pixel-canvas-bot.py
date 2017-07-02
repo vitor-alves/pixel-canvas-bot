@@ -61,7 +61,7 @@ def sniffFingerprintPacket():
 # Necessary to get the fingerprint
 def openBrowser():
 	driver = webdriver.Firefox()
-	driver.get('http://pixelcanvas.io/@-200,-473');
+	driver.get('http://pixelcanvas.io/@-200,-473')
 	time.sleep(20)
 	#driver.quit()
 
@@ -84,22 +84,23 @@ def placePixel():
         # Send pixel
         url = "http://pixelcanvas.io/api/pixel"
         data = {'x': x, 'y': y, 'color': color, 'fingerprint': fingerprint, 'token': 'null'}
-        headers = {'Content-type': 'application/json', 'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate', 'Accept-Language': 'en-US,en;q=0.8,pt;q=0.6', 'Connection': 'keep-alive', 'Host':'pixelcanvas.io', 'Origin':'http://pixelcanvas.io', 'Referer':'http://pixelcanvas.io/@-172,-484', 'Save-Data':'on', 'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.109 Safari/537.36'}
+        headers = {'Content-type': 'application/json', 'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate', 'Accept-Language': 'en-US,en;q=0.8,pt;q=0.6', 'Connection': 'keep-alive', 'Host':'pixelcanvas.io', 'Origin':'http://pixelcanvas.io', 'Referer':'http://pixelcanvas.io/@-200,-473', 'Save-Data':'on', 'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.109 Safari/537.36'}
         # Response
         r = requests.post(url, data=json.dumps(data), headers=headers)
         j = json.loads(r.text)
         wait_seconds = j['waitSeconds']
         success = j['success']
         # Print infos
+        print(r.text)
         if(success):
-            print('\n'+'Pixel colored successfuly! Position: ('+x+','+y+')!')
+            print('\n'+'Pixel colored successfuly! Position: ('+x+','+y+')')
         else:
             print('\n'+'Failed to color pixel... I will try again soon.')
         default_wait_seconds = 120.0
         if(wait_seconds is None):
             wait_seconds = default_wait_seconds
         print('Wait seconds: ' + str(wait_seconds))
-        print(online_clients + ' peole are connected to the bot server.') 
+        print(online_clients + ' people are connected to the bot server.') 
         # Place next pixel after 'wait_seconds'
         threading.Timer(wait_seconds, placePixel).start()
 
