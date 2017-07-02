@@ -62,7 +62,7 @@ def sniffFingerprintPacket():
 def openBrowser():
 	driver = webdriver.Firefox()
 	driver.get('http://pixelcanvas.io/@-200,-473')
-	time.sleep(20)
+	#time.sleep(20)
 	#driver.quit()
 
 # GET PIXEL COORDINATES AND COLOR FROM SERVER
@@ -91,7 +91,6 @@ def placePixel():
         wait_seconds = j['waitSeconds']
         success = j['success']
         # Print infos
-        print(r.text)
         if(success):
             print('\n'+'Pixel colored successfuly! Position: ('+x+','+y+')')
         else:
