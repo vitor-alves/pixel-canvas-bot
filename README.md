@@ -3,13 +3,9 @@ A bot that atomatically places pixels in http://pixelcanvas.io
 
 ### Installation and usage
 
-**1. Install pip and packages**
+**1. python3 (skip if you already have it installed)**
 
-wget https://bootstrap.pypa.io/get-pip.py
-
-sudo python3 get-pip.py
-
-sudo python3 -m pip install requests  simplejson
+sudo apt-get install python3
 
 **2. Download and run the bot**
 
