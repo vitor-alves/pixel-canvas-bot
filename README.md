@@ -11,7 +11,7 @@ wget https://bootstrap.pypa.io/get-pip.py
 
 sudo python3 get-pip.py
 
-**2. Install packages **
+**2. Install packages**
 
 sudo python3 -m pip install requests  simplejson
 
