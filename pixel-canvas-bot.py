@@ -20,10 +20,10 @@ import simplejson as json
 import socket
 import re
 import time
-from selenium import webdriver
 from threading import Thread
 import threading
 from urllib.request import urlopen
+import webbrowser
 
 fingerprint = None
 
@@ -60,10 +60,7 @@ def sniffFingerprintPacket():
 # OPEN PIXELCANVAS IN BROWSER.
 # Necessary to get the fingerprint
 def openBrowser():
-	driver = webdriver.Firefox()
-	driver.get('http://pixelcanvas.io/@-200,-473')
-	#time.sleep(20)
-	#driver.quit()
+	webbrowser.open_new('http://pixelcanvas.io/@-200,-473')
 
 # GET PIXEL COORDINATES AND COLOR FROM SERVER
 def getPixel():
