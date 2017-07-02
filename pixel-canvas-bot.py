@@ -19,8 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import os
 import sys
 parent_dir = os.path.abspath(os.path.dirname(__file__))
-lib_dir = os.path.join(parent_dir, 'lib')
-sys.path.append(lib_dir)
+packages_dir = os.path.join(parent_dir, 'packages')
+sys.path.append(packages_dir)
 import requests
 import simplejson as json
 import socket
