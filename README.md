@@ -1,14 +1,24 @@
 # pixel-canvas-bot
 A bot that atomatically places pixels in http://pixelcanvas.io
 
-### Installation
-**1. Install pip**
+### Installation and usage
+**1. Install Firefox and geckodriver**
+
+sudo apt-get install firefox
+
+wget https://github.com/mozilla/geckodriver/releases/download/v0.17.0/geckodriver-v0.17.0-linux64.tar.gz
+
+tar -zxvf geckodriver-v0.17.0-linux64.tar.gz
+
+sudo cp geckodriver /usr/local/bin/
+
+sudo chmod +x /usr/local/bin/geckodriver
+
+**2. Install pip and packages**
 
 wget https://bootstrap.pypa.io/get-pip.py
 
 sudo python3 get-pip.py
-
-**2. Install packages**
 
 sudo python3 -m pip install requests  simplejson  selenium
 
